@@ -1,0 +1,38 @@
+int ldrPin = A0;
+int buttonPin = 2;
+int ledPin = 9;
+const int threshold = 700;
+
+bool lightEnabled = false;
+bool lastButtonState = LOW;
+
+void setup() {
+  pinMode(buttonPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  int lightValue = analogRead(ldrPin);
+  bool buttonState = digitalRead(buttonPin);
+
+  if (lightEnabled && lightValue  threshold) {
+    lightEnabled = false;
+    delay(50);
+  }
+
+  if (buttonState == HIGH && lastButtonState == LOW) {
+    lightEnabled = !lightEnabled;
+    delay(50);
+  }
+  lastButtonState = buttonState;
+
+  digitalWrite(ledPin, lightEnabled  HIGH  LOW);
+
+  Serial.print(Light );
+  Serial.print(lightValue);
+  Serial.print(  Enabled );
+  Serial.println(lightEnabled);
+
+  delay(100);
+}
